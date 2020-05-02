@@ -1,19 +1,40 @@
 from flask import Flask, render_template, request, redirect, url_for, Response
 #from model import User
-# from wtforms import StringField, Form, SubmitField
-# from wtforms.validators import DataRequired
-# import quickstart
-# import sqlite3
-# db = 'challenge.db'
-# conn = sqlite3.connect(db)
-# c = conn.cursor()
+
+from forms import LoginForm
 from camera import VideoCamera
+import os
+import User
+SECRET_KEY = os.urandom(32)
 
 application = app = Flask(__name__)
+app.config['SECRET_KEY'] = SECRET_KEY
+current_user = User.User()
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm(request.form)
+    print (form.data)
+    if form.data['username'] != '':
+        un = form.data['username']
+        pw = form.data['password']
+        print(un)
+        print(pw)
+        auth = current_user.check_password(un,pw)
+        print (auth)
+        print(current_user.check_authentication())
+        if current_user.check_authentication():
+            print("REDIRECT")
+            return redirect('/')
+    return render_template('login.html', title='Login', form=form)
 
 @app.route('/', methods=['GET','POST'])
 def index():
-    return render_template('home.html')
+    print(current_user.check_authentication())
+    if current_user.check_authentication():
+        return render_template('home.html')
+    else:
+        return redirect('/login')
 
 
 def gen(camera):
