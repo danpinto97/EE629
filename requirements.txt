@@ -1,0 +1,7 @@
+Flask_WTF==0.14.3
+Werkzeug==1.0.1
+Flask_Login==0.5.0
+Flask==1.0.2
+opencv_python==4.2.0.32
+pymongo==3.7.2
+WTForms==2.2.1
